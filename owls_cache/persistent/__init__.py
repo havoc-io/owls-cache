@@ -25,11 +25,13 @@ _thread_local = threading.local()
 
 
 # Utility function to get the current thread's cache
-_get_cache = lambda: getattr(_thread_local, 'cache', None)
+def _get_cache():
+    return getattr(_thread_local, 'cache', None)
 
 
 # Utility function to set the current thread's cache
-_set_cache = lambda cache: setattr(_thread_local, 'cache', cache)
+def _set_cache(cache):
+    setattr(_thread_local, 'cache', cache)
 
 
 def cached(name,
