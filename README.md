@@ -150,7 +150,7 @@ will be pickled into individual files.
 
 Redis storage is implemented by the
 `owls_cache.persistent.caches.redis.RedisPersistentCache` store.  It uses the
-`redis` Python module, and its constructor takes the same arguments as the
-`redis.StrictRedis` class, with an additional optional argument named `prefix`.
-The `prefix` argument specifies a string that will be used to prefix all keys
-put into Redis.
+[`redis` Python module](https://redis-py.readthedocs.org/en/latest/), and its
+constructor takes the same arguments as the `redis.StrictRedis` class, with an
+additional optional argument named `prefix`.  The `prefix` argument specifies a
+string that will be used to prefix all keys put into Redis.
