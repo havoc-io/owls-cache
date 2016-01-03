@@ -37,13 +37,16 @@ memoization type and storage.
 Transient memoization is provided by the `owls_cache.transient.cached`
 decorator:
 
+    # owls-cache imports
     from owls_cache.transient import cached
 
+    # Create a transiently memoized function
     @cached()
     def expensive_function(x, y, z):
         print("x = {0}, y = {1}, z = {2}".format(x, y, z))
         return x + y + z
 
+    # Test transient memoization
     r0 = expensive_function(1, 2, 3)
     r1 = expensive_function(4, 5, 6)
     r2 = expensive_function(1, 2, 3) # Doesn't print any message
@@ -90,8 +93,12 @@ default, the persistent decorator requires an additional persistent storage
 context that specifies the persistent store to use (at least if the decorator is
 to have any effect):
 
+    # owls-cache imports
     from owls_cache.persistent import cached
+    from owls_cache.persistent import caching_into
+    from owls_cache.persistent.caches.fs import FileSystemPersistentCache
 
+    # Create a persistently memoized function
     @cached('example.expensive_function')
     def expensive_function(x, y, z):
         print("x = {0}, y = {1}, z = {2}".format(x, y, z))
@@ -101,11 +108,10 @@ to have any effect):
     r0 = expensive_function(1, 2, 3)
     r1 = expensive_function(1, 2, 3)
 
-    from owls_cache.persistent import caching_into
-    from owls_cache.persistent.caches.fs import FileSystemPersistentCache
-
+    # Create a persistent store
     fs_cache = FileSystemPersistentCache('/tmp')
 
+    # Test persistent memoization
     with caching_into(fs_cache):
         r2 = expensive_function(1, 2, 3)
         r3 = expensive_function(1, 2, 3) # Doesn't print any message
@@ -130,11 +136,13 @@ The `owls_cache.persistent.cached` decorator also takes a `mapper` argument that
 serves the same purpose as in the transient case.
 
 Two backends are provided by the owls-cache module: on-disk storage and storage
-in a Redis key-value store.  Their functionality is detailed below.
+in a [Redis key-value store](http://redis.io/).  Their functionality is detailed
+below.
 
 Additionally, custom backends can be easily implemented by subclassing
-`owls_cache.persistent.caches.PersistentCache`.  This simple interface requires
-only two easily implemented methods: `get` and `set`.
+`owls_cache.persistent.caches.PersistentCache`.    Required methods are
+documented in the docstrings of the corresponding module, and examples can be
+found in the existing backends.
 
 
 #### On-disk
@@ -151,6 +159,6 @@ will be pickled into individual files.
 Redis storage is implemented by the
 `owls_cache.persistent.caches.redis.RedisPersistentCache` store.  It uses the
 [`redis` Python module](https://redis-py.readthedocs.org/en/latest/), and its
-constructor takes the same arguments as the `redis.StrictRedis` class, with an
-additional optional argument named `prefix`.  The `prefix` argument specifies a
-string that will be used to prefix all keys put into Redis.
+constructor takes the same arguments as the `redis.StrictRedis` constructor,
+with an additional optional argument named `prefix`.  The `prefix` argument
+specifies a string that will be used to prefix all keys put into Redis.
